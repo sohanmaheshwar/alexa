@@ -130,6 +130,8 @@ const handlers = {
             }
         }
 
+        // if there's no slot used 
+
        else {
             const factIndex = Math.floor(Math.random() * factArr.length);
             randomFact = factArr[factIndex];
