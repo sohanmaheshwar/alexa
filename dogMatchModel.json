@@ -1,0 +1,238 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "dog match",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "DogMatchIntent",
+                    "slots": [
+                        {
+                            "name": "size",
+                            "type": "sizeType",
+                            "samples": [
+                                "{size}",
+                                "I want a {size} dog"
+                            ]
+                        },
+                        {
+                            "name": "temperament",
+                            "type": "temperamentType",
+                            "samples": [
+                                "{temperament}",
+                                "I want a {temperament} dog"
+                            ]
+                        },
+                        {
+                            "name": "energy",
+                            "type": "energyType",
+                            "samples": [
+                                "{energy} energy",
+                                "{energy}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "I want a {temperament} dog with {energy} energy",
+                        "I want a {size} dog that is {energy} energy",
+                        "I want a {energy} energy dog",
+                        "I want {temperament} {size}",
+                        "I want a {size} {temperament} dog",
+                        "I want a {temperament} dog",
+                        "I want a {size} dog",
+                        "I want a dog",
+                        "match me a dog"
+                    ]
+                },
+                {
+                    "name": "ExplainSizeIntent",
+                    "slots": [
+                        {
+                            "name": "size",
+                            "type": "sizeType"
+                        },
+                        {
+                            "name": "unitOfMeasurement",
+                            "type": "unitOfMeasurementType"
+                        }
+                    ],
+                    "samples": [
+                        "how many {unitOfMeasurement} is a {size} dog",
+                        "what is a {size} dog"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "sizeType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "large",
+                                "synonyms": [
+                                    "big",
+                                    "huge",
+                                    "gigantic"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "medium",
+                                "synonyms": [
+                                    "average"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "small",
+                                "synonyms": [
+                                    "petit",
+                                    "tiny"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "temperamentType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "family",
+                                "synonyms": [
+                                    "kids friendly"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "guard",
+                                "synonyms": [
+                                    "protective"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "energyType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "low"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "high"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "unitOfMeasurementType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "kilograms"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "pounds"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "DogMatchIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "size",
+                            "type": "sizeType",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.478944474788.738182512373"
+                            }
+                        },
+                        {
+                            "name": "temperament",
+                            "type": "temperamentType",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.13813587090.1505964478433"
+                            }
+                        },
+                        {
+                            "name": "energy",
+                            "type": "energyType",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.13813587090.1245864714425"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.478944474788.738182512373",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "what size do you want. small, medium or large?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.13813587090.1505964478433",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Do you want a family dog or a guard dog?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.13813587090.1245864714425",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Would you like a high energy or a low energy dog?"
+                    }
+                ]
+            }
+        ]
+    }
+}
