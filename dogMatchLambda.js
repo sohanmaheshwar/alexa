@@ -121,13 +121,33 @@ const InProgressPetMatchIntent = {
   },
 
   handle(handlerInput) {
+      
+	    const currentIntent = handlerInput.requestEnvelope.request.intent;
+	    const attributesManager = handlerInput.attributesManager;
+	    const sessionAttributes = attributesManager.getSessionAttributes();
 
+	    if(sessionAttributes[currentIntent.name]) {
+	      const tempSlots = sessionAttributes[currentIntent.name].slots;
+	      for(var key in tempSlots) {
+	        // If we captured the value before and current intent is not capturing that same slot then store it to currentIntent 
+		if (tempSlots[key].value && !currentIntent.slots[key].value) {
+		  currentIntent.slots[key] = tempSlots[key];
+		}
+	      }
+	    }
+	    sessionAttributes[currentIntent.name] = currentIntent;
+	    attributesManager.setSessionAttributes(sessionAttributes);
+    	
+
+      /*
       let updatedIntent = handlerInput.requestEnvelope.request.intent;
       let updatedSlots = updatedIntent.slots;
+      */
       
 
   return handlerInput.responseBuilder
-    .addDelegateDirective(updatedIntent)
+    //.addDelegateDirective(updatedIntent)
+    .addDelegateDirective(currentIntent)
     .getResponse();
   }
 };
