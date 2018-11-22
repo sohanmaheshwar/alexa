@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "dog match",
+            "invocationName": "pet match",
             "intents": [
                 {
                     "name": "AMAZON.FallbackIntent",
@@ -30,6 +30,7 @@
                             "name": "size",
                             "type": "sizeType",
                             "samples": [
+                                "{size} dog",
                                 "{size}",
                                 "I want a {size} dog"
                             ]
@@ -41,21 +42,12 @@
                                 "{temperament}",
                                 "I want a {temperament} dog"
                             ]
-                        },
-                        {
-                            "name": "energy",
-                            "type": "energyType",
-                            "samples": [
-                                "{energy} energy",
-                                "{energy}"
-                            ]
                         }
                     ],
                     "samples": [
-                        "I want a {temperament} dog with {energy} energy",
-                        "I want a {size} dog that is {energy} energy",
-                        "I want a {energy} energy dog",
-                        "I want {temperament} {size}",
+                        "tell me a {size} dog that is {temperament}",
+                        "reccomend a {temperament} dog that is {size}",
+                        "I want {temperament} {size} dog",
                         "I want a {size} {temperament} dog",
                         "I want a {temperament} dog",
                         "I want a {size} dog",
@@ -136,21 +128,6 @@
                     ]
                 },
                 {
-                    "name": "energyType",
-                    "values": [
-                        {
-                            "name": {
-                                "value": "low"
-                            }
-                        },
-                        {
-                            "name": {
-                                "value": "high"
-                            }
-                        }
-                    ]
-                },
-                {
                     "name": "unitOfMeasurementType",
                     "values": [
                         {
@@ -191,15 +168,6 @@
                             "prompts": {
                                 "elicitation": "Elicit.Slot.13813587090.1505964478433"
                             }
-                        },
-                        {
-                            "name": "energy",
-                            "type": "energyType",
-                            "confirmationRequired": false,
-                            "elicitationRequired": true,
-                            "prompts": {
-                                "elicitation": "Elicit.Slot.13813587090.1245864714425"
-                            }
                         }
                     ]
                 }
@@ -211,7 +179,7 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "what size do you want. small, medium or large?"
+                        "value": "What size do you want. Small, medium or large?"
                     }
                 ]
             },
@@ -221,15 +189,6 @@
                     {
                         "type": "PlainText",
                         "value": "Do you want a family dog or a guard dog?"
-                    }
-                ]
-            },
-            {
-                "id": "Elicit.Slot.13813587090.1245864714425",
-                "variations": [
-                    {
-                        "type": "PlainText",
-                        "value": "Would you like a high energy or a low energy dog?"
                     }
                 ]
             }
