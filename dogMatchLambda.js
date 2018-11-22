@@ -4,12 +4,11 @@
 const Alexa = require("ask-sdk");
 const https = require("https");
 
-const invocationName = "dog match";
+const invocationName = "pet match";
 
 const requiredSlots = [
   'size',
   'temperament',
-  'energy',
 ];
 
 
@@ -164,7 +163,8 @@ canHandle(handlerInput) {
   async handle(handlerInput) {
     const filledSlots = handlerInput.requestEnvelope.request.intent.slots;
 
-    let outputSpeech = 'here is your ' + filledSlots.size.value + ' dog that is ' + filledSlots.energy.value + ' energy and is a ' + filledSlots.temperament.value + ' dog' ;
+    //let outputSpeech = 'here is your ' + filledSlots.size.value + ' dog that is a ' + filledSlots.temperament.value + ' dog' ;
+    let outputSpeech = "Excellent! I have got the perfect suggestion for a " + filledSlots.size.value + "," + filledSlots.temperament.value + " dog";
 
     return handlerInput.responseBuilder
       .speak(outputSpeech)
@@ -189,8 +189,8 @@ canHandle(handlerInput) {
     let outputSpeech = 'A ' + size + ' dog is ' 
       + sizeChart[size][unitOfMeasurement] + ' ' + unitOfMeasurement + '. ';
 
-    const prompt = 'There are dogs that are tiny, small medium and large' 
-      + ' which would you like?';
+    const prompt = 'There are dogs that are tiny, small medium and large.' 
+      + ' Which would you like?';
 
     return handlerInput.responseBuilder
       .speak(outputSpeech + prompt)
@@ -199,21 +199,67 @@ canHandle(handlerInput) {
   }
 };
 
-const LaunchRequest_Handler =  {
-    canHandle(handlerInput) {
-        const request = handlerInput.requestEnvelope.request;
-        return request.type === 'LaunchRequest';
-    },
-    handle(handlerInput) {
-        const responseBuilder = handlerInput.responseBuilder;
+const LaunchRequestHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'LaunchRequest';
+  },
+  handle(handlerInput) {
+    
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    const launchCount = sessionAttributes['launchCount'] || 0;
 
-        let say = 'hello' + ' and welcome to ' + invocationName + ' ! Say help to hear some options.';
+    let say = '';
+        if (launchCount == 1) {
+            say = 'Welcome to pet match! ';
+        } else {
+            say = 'Welcome back! ';
+        }
 
-        return responseBuilder
-            .speak(say)
-            .reprompt('try again, ' + say)
-            .getResponse();
-    },
+    return handlerInput.responseBuilder
+      .speak(say + 'I can help you find the best dog for you. ' +
+        'What are two things you are looking for in a dog?')
+      .reprompt('What size and temperament are you looking for in a dog?')
+      .getResponse();
+  },
+};
+
+
+const RequestPersistenceInterceptor = {
+  process(handlerInput) {
+    
+      if(handlerInput.requestEnvelope.session['new']) {
+
+          return new Promise((resolve, reject) => {
+
+              handlerInput.attributesManager.getPersistentAttributes()
+
+                  .then((sessionAttributes) => {
+                      sessionAttributes = sessionAttributes || {};
+
+                      // initialise launch count for first time
+                      if(Object.keys(sessionAttributes).length === 0) {
+                         sessionAttributes['launchCount'] = 0;
+                      }
+
+                      sessionAttributes['launchCount'] += 1;
+                      
+                      handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+                      handlerInput.attributesManager.savePersistentAttributes()
+                          .then(() => {
+                              resolve();
+                          })
+                          .catch((err) => {
+                              reject(err);
+                          });
+
+                  });
+
+          });
+
+      } // end session['new']
+
+  }
 };
 
 const SessionEndedHandler =  {
@@ -267,6 +313,7 @@ const sizeChart = {
 const skillBuilder = Alexa.SkillBuilders.standard();
 exports.handler = skillBuilder
     .addRequestHandlers(
+        LaunchRequestHandler,
         AMAZON_FallbackIntent_Handler,
         AMAZON_CancelIntent_Handler,
         AMAZON_HelpIntent_Handler,
@@ -275,17 +322,14 @@ exports.handler = skillBuilder
         InProgressPetMatchIntent,
         CompletedPetMatchIntent,
         ExplainSizeIntentHandler,
-        LaunchRequest_Handler,
         SessionEndedHandler
     )
     .addErrorHandlers(ErrorHandler)
 
-   // .addResponseInterceptors(ResponseRecordSpeechOutputInterceptor)
-
- // .addRequestInterceptors(RequestPersistenceInterceptor)
+    .addRequestInterceptors(RequestPersistenceInterceptor)
  // .addResponseInterceptors(ResponsePersistenceInterceptor)
 
- // .withTableName("askMemorySkillTable")
- // .withAutoCreateTable(true)
+    .withTableName("DogMatchSkillTable")
+    .withAutoCreateTable(true)
 
     .lambda();
