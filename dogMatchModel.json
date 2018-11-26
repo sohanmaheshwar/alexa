@@ -45,6 +45,7 @@
                         }
                     ],
                     "samples": [
+                        "{size}",
                         "tell me a {size} dog that is {temperament}",
                         "reccomend a {temperament} dog that is {size}",
                         "I want {temperament} {size} dog",
